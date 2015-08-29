@@ -1,0 +1,23 @@
+#!/bin/sh
+
+BIN="bin"
+DATA="data"
+SRC="src"
+EXE="${BIN}/do_the_thing"
+
+# Safely make dirs
+mkdir -p ${BIN}
+mkdir -p ${DATA}
+mkdir -p ${SRC}
+
+echo "Compiling Capn Proto"
+capnp compile -oc++:${SRC} test.capnp
+
+echo "Compiling Source"
+g++ main.cpp -std=c++11 -I=/usr/local/include/capnp -lcapnp -lkj -o ${EXE}
+
+echo "Generating Data"
+./${EXE}
+
+echo "Executing Python Test"
+nosetests
