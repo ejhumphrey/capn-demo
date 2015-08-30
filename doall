@@ -10,6 +10,9 @@ mkdir -p ${BIN}
 mkdir -p ${DATA}
 mkdir -p ${SRC}
 
+rm ${SRC}/*.h
+rm ${SRC}/*.c++
+
 echo "Compiling Capn Proto"
 capnp compile -oc++:${SRC} test.capnp
 
