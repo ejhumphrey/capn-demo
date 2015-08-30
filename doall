@@ -1,5 +1,18 @@
 #!/bin/sh
+# Simple shell script to compile the Capn Proto and C++ source, run the main
+# file to generate the serialized data, and execute a python script that
+# that checks the data for consistency.
+#
+# Sample Call:
+# $ doall 3375
 
+if [ -z "$1" ]; then
+    echo "Usage:"
+    echo "doall {num_elements}"
+    echo $'\tnum_elements - Number of integer elements to populate the proto.'
+    exit 0
+fi
+NUM_ELEMENTS=$1
 BIN="bin"
 DATA="data"
 SRC="src"
@@ -20,7 +33,7 @@ echo "Compiling Source"
 g++ main.cpp -std=c++11 -I=/usr/local/include/capnp -lcapnp -lkj -o ${EXE}
 
 echo "Generating Data"
-./${EXE}
+./${EXE} ${NUM_ELEMENTS}
 
 echo "Executing Python Test"
-nosetests
+python test_pycapnp.py ${NUM_ELEMENTS}
